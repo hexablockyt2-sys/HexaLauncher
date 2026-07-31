@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hexa Launcher - Free Minecraft Launcher</title>
+<meta name="description" content="Fast, free Minecraft launcher with Fabric and Modrinth support">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+html { scroll-behavior:smooth; }
+body { background:#0a0612; color:#fff; overflow-x:hidden; }
+a { color:inherit; text-decoration:none; }
+
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 40px; background:rgba(10,6,18,0.85); backdrop-filter:blur(12px); border-bottom:1px solid rgba(168,85,247,0.15); display:flex; justify-content:space-between; align-items:center; }
+.nav-logo { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:2px; }
+.nav-logo img { width:32px; height:32px; }
+.nav-links { display:flex; gap:28px; }
+.nav-links a { font-size:13px; font-weight:500; color:#c9c0e0; transition:color .2s; }
+.nav-links a:hover { color:#a855f7; }
+.nav-cta { background:#a855f7; padding:9px 20px; border-radius:8px; font-size:13px; font-weight:600; transition:all .2s; }
+.nav-cta:hover { background:#9333ea; transform:translateY(-1px); }
+
+.hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:120px 40px 60px; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; top:20%; left:50%; transform:translateX(-50%); width:600px; height:600px; background:radial-gradient(circle, rgba(168,85,247,0.25) 0%, transparent 70%); filter:blur(60px); z-index:0; }
+.hero-content { position:relative; z-index:1; max-width:900px; }
+.hero-badge { display:inline-block; padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); border-radius:20px; font-size:12px; color:#a855f7; font-weight:600; letter-spacing:1px; margin-bottom:24px; }
+.hero h1 { font-size:64px; font-weight:900; line-height:1.1; margin-bottom:20px; background:linear-gradient(135deg,#fff 30%,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero p { font-size:18px; color:#c9c0e0; line-height:1.6; margin-bottom:36px; max-width:640px; margin-left:auto; margin-right:auto; }
+.hero-buttons { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.btn-primary { background:linear-gradient(135deg,#a855f7,#6366f1); padding:14px 32px; border-radius:10px; font-weight:700; font-size:14px; letter-spacing:1px; display:inline-flex; align-items:center; gap:8px; box-shadow:0 8px 24px rgba(168,85,247,0.35); transition:all .2s; border:none; cursor:pointer; color:#fff; }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(168,85,247,0.5); }
+.btn-secondary { background:transparent; border:1px solid rgba(168,85,247,0.4); padding:13px 30px; border-radius:10px; font-weight:600; font-size:14px; letter-spacing:1px; transition:all .2s; color:#fff; }
+.btn-secondary:hover { background:rgba(168,85,247,0.1); border-color:#a855f7; }
+.hero-meta { margin-top:24px; font-size:12px; color:#6b5b8f; }
+.hero-meta span { color:#a855f7; font-weight:600; }
+
+.section { padding:100px 40px; }
+.section-inner { max-width:1200px; margin:0 auto; }
+.section-title { text-align:center; margin-bottom:60px; }
+.section-title h2 { font-size:42px; font-weight:800; margin-bottom:12px; }
+.section-title p { color:#8b7ab8; font-size:16px; }
+.features-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
+.feature { background:linear-gradient(180deg,rgba(26,16,48,0.6),rgba(20,10,36,0.6)); border:1px solid rgba(168,85,247,0.15); border-radius:16px; padding:28px; transition:all .3s; }
+.feature:hover { border-color:rgba(168,85,247,0.4); transform:translateY(-4px); }
+.feature-icon { width:44px; height:44px; background:linear-gradient(135deg,#a855f7,#6366f1); border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; margin-bottom:16px; }
+.feature h3 { font-size:18px; font-weight:700; margin-bottom:8px; }
+.feature p { color:#8b7ab8; font-size:14px; line-height:1.6; }
+
+.download-section { background:linear-gradient(180deg,transparent,rgba(168,85,247,0.05)); border-top:1px solid rgba(168,85,247,0.1); border-bottom:1px solid rgba(168,85,247,0.1); }
+.download-box { max-width:600px; margin:0 auto; text-align:center; padding:50px 40px; background:linear-gradient(180deg,rgba(26,16,48,0.8),rgba(20,10,36,0.8)); border:1px solid rgba(168,85,247,0.3); border-radius:18px; }
+.download-version { display:inline-block; background:rgba(168,85,247,0.15); color:#a855f7; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:700; letter-spacing:2px; margin-bottom:14px; }
+.download-box h2 { font-size:32px; font-weight:800; margin-bottom:10px; }
+.download-box p { color:#8b7ab8; margin-bottom:28px; }
+.download-info { display:flex; justify-content:center; gap:24px; margin-top:20px; font-size:12px; color:#6b5b8f; }
+.download-info span { color:#a855f7; }
+
+.footer { padding:50px 40px 30px; border-top:1px solid rgba(168,85,247,0.1); text-align:center; }
+.footer-links { display:flex; justify-content:center; gap:28px; margin-bottom:20px; flex-wrap:wrap; }
+.footer-links a { color:#8b7ab8; font-size:13px; transition:color .2s; }
+.footer-links a:hover { color:#a855f7; }
+.footer-copy { color:#4c3d6b; font-size:12px; margin-top:14px; }
+.footer-disclaimer { color:#4c3d6b; font-size:11px; margin-top:8px; max-width:600px; margin-left:auto; margin-right:auto; line-height:1.5; }
+
+@media (max-width:640px) {
+    .nav { padding:14px 20px; }
+    .nav-links { display:none; }
+    .hero h1 { font-size:40px; }
+    .hero p { font-size:16px; }
+    .section { padding:60px 20px; }
+    .section-title h2 { font-size:32px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-logo">
+        <img src="logo.svg" alt="Hexa">
+        <span>HEXA<b>LAUNCHER</b></span>
+    </div>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+        <a href="https://github.com/hexablockyt2-sys/HexaLauncher" target="_blank">GitHub</a>
+        <a href="https://discord.gg/g94dxfTvpj" target="_blank">Discord</a>
+    </div>
+    <a href="#download" class="nav-cta">Download</a>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">v1.4.3 - Amethyst Build</div>
+        <h1>Play Minecraft<br>Your Way.</h1>
+        <p>A fast, lightweight launcher with Fabric and one-click Modrinth modpack support. Built for players who want control without the bloat.</p>
+        <div class="hero-buttons">
+            <a href="#download" class="btn-primary">Download for Windows</a>
+            <a href="https://github.com/hexablockyt2-sys/HexaLauncher" target="_blank" class="btn-secondary">View on GitHub</a>
+        </div>
+        <div class="hero-meta">Free forever . <span>Windows 10/11</span> . ~100 MB installer</div>
+    </div>
+</section>
+
+<section class="section" id="features">
+    <div class="section-inner">
+        <div class="section-title">
+            <h2>Everything you need</h2>
+            <p>Built by a Minecraft player, for Minecraft players</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">V</div>
+                <h3>All Versions</h3>
+                <p>Release, Snapshot, Beta, Alpha. From Minecraft 1.0 to the latest snapshot.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">F</div>
+                <h3>Fabric Support</h3>
+                <p>One-click Fabric installation. Forge and OptiFine coming in v1.4.4.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">M</div>
+                <h3>Modrinth Modpacks</h3>
+                <p>Browse and install thousands of modpacks directly from Modrinth.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">J</div>
+                <h3>Auto Java</h3>
+                <p>Never install Java again. The launcher downloads the correct version for you.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">A</div>
+                <h3>Microsoft Login</h3>
+                <p>Log in with your Microsoft account for premium servers and skins.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">I</div>
+                <h3>Isolated Instances</h3>
+                <p>Every instance gets its own folder. No conflicts between modpacks.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section download-section" id="download">
+    <div class="download-box">
+        <div class="download-version">LATEST . v1.4.3</div>
+        <h2>Download Hexa Launcher</h2>
+        <p>Free forever. No ads. No tracking.</p>
+        <a href="https://github.com/hexablockyt2-sys/HexaLauncher/releases/latest/download/HexaLauncher-Setup-1.4.3.exe" class="btn-primary" style="padding:16px 40px; font-size:15px;">Download for Windows</a>
+        <div class="download-info">
+            <span>Windows 10/11</span>
+            <span>64-bit</span>
+            <span>~100 MB</span>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="https://github.com/hexablockyt2-sys/HexaLauncher" target="_blank">GitHub</a>
+        <a href="https://www.youtube.com/@HexaBlockYT1" target="_blank">YouTube</a>
+        <a href="https://discord.gg/g94dxfTvpj" target="_blank">Discord</a>
+        <a href="https://github.com/hexablockyt2-sys/HexaLauncher/issues" target="_blank">Report Bug</a>
+    </div>
+    <div class="footer-copy">Made by HexaBlockYT . Built with Electron</div>
+    <div class="footer-disclaimer">
+        Not affiliated with Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios.
+    </div>
+</footer>
+
+</body>
+</html>
