@@ -1,0 +1,8 @@
+{
+  "blocked": ["1.4.3-original", "1.4.3-old", "1.4.2", "1.4.1", "1.4.0"],
+  "minRequired": "1.4.3",
+  "latestVersion": "1.4.3-secure",
+  "message": "This version has security issues. Please update to the latest version for your account safety.",
+  "updateUrl": "https://github.com/hexablockyt2-sys/HexaLauncher/releases/latest",
+  "reason": "Security update - Microsoft account protection"
+}
